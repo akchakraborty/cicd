@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a1e4f8e8-45fb-4919-a73d-28fbf5b033cb" basePath="/mybasepath" >
+		<http:listener-connection host="0.0.0.0" port="8081" >
+			<reconnection >
+				<reconnect />
+			</reconnection>
+		</http:listener-connection>
+	</http:listener-config>
+	<flow name="my-first-mule-project-hello-worldFlow" doc:id="7cc25678-0c35-4734-bc58-22deec3c9efe" initialState="started">
+		<http:listener doc:name="Real Time" doc:id="6a3c5e08-1654-457b-ad85-24b1c082d0a1" config-ref="HTTP_Listener_config" path="/firstmule/httpexample"/>
+		<logger level="INFO" doc:name="Logger1" doc:id="490fbbab-d43f-4187-85ee-e8ceaff4868f" message="Hello world"/>
+		<set-payload value="This is a sample string payload" doc:name="Set Payload" doc:id="88c5568b-8ed3-4c0b-85ba-f8c3906ff7eb" />
+		<flow-ref doc:name="Flow Reference to sub flow" doc:id="a6c0b5e8-f985-44c4-84af-42993f981989" name="my-first-mule-project-sub-flow"/>
+	</flow>
+	<sub-flow name="my-first-mule-project-sub-flow" doc:id="585850de-a6b1-4acf-9aa2-ee8de1e3f97c" >
+		<logger level="INFO" doc:name="Logger2" doc:id="b68c5401-1d0b-4559-bc82-adfc6221b36f" message="Payload is set. Chekcing payload == #[payload]"/>
+		<flow-ref doc:name="Flow Reference-to flow 2" doc:id="5bada5ef-d50e-4dcb-8f82-4522d4d59adb" name="my-first-mule-project-hello-world-flow-2"/>
+	</sub-flow>
+	<flow name="my-first-mule-project-hello-world-flow-2" doc:id="0e4ddea5-17b3-4755-8f0b-c43004f4e07c" >
+		<logger level="INFO" doc:name="Logger" doc:id="2e755601-045c-4f5d-859c-70fd2d229b48" message="This logger is inside flow 2" />
+	</flow>
+</mule>
